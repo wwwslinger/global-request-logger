@@ -55,10 +55,10 @@ function attachLoggersToRequest(protocol, options, callback) {
 
   // Extract request logging details
   if (typeof options === 'string') {
-    _.assign(logInfo.request, url.parse(options));
-  } else if (typeof options === 'object') {
-    _.assign(logInfo.request, options);
+    options = url.parse(options);
   }
+  _.assign(logInfo.request, _.pick(options, 'port', 'path', 'host', 'protocol', 'auth', 'hostname', 'hash', 'search', 'query', 'pathname', 'href'));
+
   logInfo.request.method = req.method || 'get';
   logInfo.request.headers = req._headers;
 
