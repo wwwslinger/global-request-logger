@@ -24,5 +24,5 @@ globalLog.on('error', function(request, response) {
 });
 
 
-var opts = url.parse('https://api.meetearnest.com');
+var opts = url.parse('https://www.google.com');
 https.get(opts);
