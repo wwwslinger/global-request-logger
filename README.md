@@ -13,7 +13,7 @@ The logger will capture request and response arguments as well as the body sent 
 An example log object for a call to `https://www.google.com`:
 
 **Request**
-```json
+```js
 { protocol: 'https:',
   slashes: true,
   auth: null,
@@ -33,7 +33,7 @@ An example log object for a call to `https://www.google.com`:
 ```
 
 **Response**
-```json
+```js
 { statusCode: 200,
   headers:
    { date: 'Sun, 17 Aug 2014 20:03:02 GMT',
