@@ -5,14 +5,17 @@ var
   https          = require('https'),
   _              = require('lodash'),
   events         = require('events'),
-  util           = require('util')
+  util           = require('util'),
+  url            = require('url')
 ;
 
-// Save the original requests for restoration later.
-var ORIGINALS = {
-  http: _.pick(http, 'request'),
-  https: _.pick(https, 'request')
-};
+var ORIGINALS;
+function saveGlobals() {
+  ORIGINALS = {
+    http: _.pick(http, 'request'),
+    https: _.pick(https, 'request')
+  };
+}
 
 function resetGlobals() {
   _.assign(http, ORIGINALS.http);
@@ -39,8 +42,12 @@ function attachLoggersToRequest(protocol, options, callback) {
   };
 
   // Extract request logging details
-  _.assign(logInfo.request, options);
-  _.assign(logInfo.request, _.pick(req, 'method'));
+  if (typeof options === 'string') {
+    _.assign(logInfo.request, url.parse(options));
+  } else if (typeof options === 'object') {
+    _.assign(logInfo.request, options);
+  }
+  logInfo.request.method = req.method || 'get';
   logInfo.request.headers = req._headers;
 
   // todo - how do we get the request body
@@ -81,6 +88,7 @@ GlobalLog.prototype.initialize = function (options) {
 
 
   try {
+    saveGlobals();
     http.request = attachLoggersToRequest.bind(http, 'http');
     https.request = attachLoggersToRequest.bind(https, 'https');
     globalLogSingleton.isEnabled = true;
