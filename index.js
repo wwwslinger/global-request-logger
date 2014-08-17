@@ -32,6 +32,18 @@ util.inherits(GlobalLog, events.EventEmitter);
 var globalLogSingleton = module.exports = new GlobalLog();
 
 
+function logBodyChunk(array, chunk) {
+  if (chunk) {
+    var toAdd = chunk;
+    var newLength = array.length + chunk.length;
+    if (newLength > globalLogSingleton.maxBodyLength) {
+      toAdd = chunk.slice(0, globalLogSingleton.maxBodyLength - newLength);
+    }
+    array.push(toAdd);
+  }
+}
+
+
 function attachLoggersToRequest(protocol, options, callback) {
   var httporhttps = this;
   var req = ORIGINALS[protocol].request.call(httporhttps, options, callback);
@@ -50,7 +62,12 @@ function attachLoggersToRequest(protocol, options, callback) {
   logInfo.request.method = req.method || 'get';
   logInfo.request.headers = req._headers;
 
-  // todo - how do we get the request body
+  var requestData = [];
+  var originalWrite = req.write;
+  req.write = function() {
+    logBodyChunk(requestData, arguments[0]);
+    originalWrite.apply(req, arguments);
+  };
 
   req.on('error', function (error) {
     logInfo.request.error = error;
@@ -58,12 +75,12 @@ function attachLoggersToRequest(protocol, options, callback) {
   });
 
   req.on('response', function (res) {
+    logInfo.request.body = requestData.toString();
     _.assign(logInfo.response, _.pick(res, 'statusCode', 'headers', 'trailers', 'httpVersion', 'url', 'method'));
 
     var responseData = [];
     res.on('data', function (data) {
-      // todo - put the check for max length here
-      responseData[responseData.length] = data;
+      logBodyChunk(responseData, data);
     });
     res.on('end', function () {
       logInfo.response.body = responseData.toString();

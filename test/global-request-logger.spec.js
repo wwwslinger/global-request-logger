@@ -79,7 +79,7 @@ describe('Global Request Logger', function () {
 
       it('should log request error', function (done) {
         http.get('http://www.example.com');
-        globalLogger.on('error', function(req, res) {
+        globalLogger.once('error', function(req, res) {
           should.exist(req);
           req.should.have.property('error');
 
@@ -96,7 +96,7 @@ describe('Global Request Logger', function () {
 
         http.get('http://www.example.com');
 
-        globalLogger.on('success', function (req, res) {
+        globalLogger.once('success', function (req, res) {
           should.exist(req);
           req.should.have.property('method');
           req.should.have.ownProperty('headers');
@@ -105,6 +105,49 @@ describe('Global Request Logger', function () {
           res.should.have.property('statusCode');
           res.should.have.property('headers');
           res.should.have.property('body');
+          done();
+        });
+      });
+
+      it('should log request body', function (done) {
+        nock('http://www.example.com')
+          .get('/')
+          .reply(200, 'Example');
+
+        var req = http.get('http://www.example.com');
+        req.write('Write to the body');
+        globalLogger.once('success', function (req) {
+          should.exist(req);
+          req.should.have.property('body', 'Write to the body');
+          done();
+        });
+      });
+
+      it('should limit the request maxBodyLength', function (done) {
+        nock('http://www.example.com')
+          .get('/')
+          .reply(200, 'Example');
+
+        globalLogger.maxBodyLength = 2;
+
+        var req = http.get('http://www.example.com');
+        req.write('Write to the body');
+        globalLogger.once('success', function (req) {
+          should.exist(req);
+          req.should.have.property('body', 'Wr');
+          done();
+        });
+      });
+
+      it('should limit the response maxBodyLength', function (done) {
+        nock('http://www.example.com')
+          .get('/')
+          .reply(200, 'Example');
+
+        var req = http.get('http://www.example.com');
+        req.write('Write to the body');
+        globalLogger.once('success', function (req, res) {
+          res.should.have.property('body', 'Ex');
           done();
         });
       });
