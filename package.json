@@ -14,8 +14,8 @@
   "devDependencies": {
     "mocha": "~1.21.4",
     "chai": "~1.9.1",
-    "mocha-istanbul": "~0.2.0",
     "istanbul": "~0.3.0",
-    "sinon": "~1.10.3"
+    "sinon": "~1.10.3",
+    "nock": "~0.45.0"
   }
 }
