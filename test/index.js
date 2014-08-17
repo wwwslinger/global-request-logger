@@ -25,7 +25,4 @@ globalLog.on('error', function(request, response) {
 
 
 var opts = url.parse('https://api.meetearnest.com');
-https.get(opts, function (res) {
-  console.log('*****');
-  res.pipe(process.stdout);
-});
+https.get(opts);

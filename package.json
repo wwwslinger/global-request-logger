@@ -1,14 +1,21 @@
 {
-  "name": "request-logger",
-  "version": "0.0.0",
-  "description": "",
+  "name": "global-request-logger",
+  "version": "0.0.1",
+  "description": "Attaches a transparent EventEmitter to all http/https requests for global logging.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/**/*.spec.js --reporter spec"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Brian Romanko",
+  "license": "MIT",
   "dependencies": {
     "lodash": "~2.4.1"
+  },
+  "devDependencies": {
+    "mocha": "~1.21.4",
+    "chai": "~1.9.1",
+    "mocha-istanbul": "~0.2.0",
+    "istanbul": "~0.3.0",
+    "sinon": "~1.10.3"
   }
 }
