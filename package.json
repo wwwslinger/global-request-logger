@@ -1,10 +1,14 @@
 {
   "name": "global-request-logger",
   "version": "0.0.1",
-  "description": "Attaches a transparent EventEmitter to all http/https requests for global logging.",
+  "description": "This module configures the http and https modules to raise logging events for every outgoing request.",
   "main": "index.js",
   "scripts": {
     "test": "mocha test/**/*.spec.js --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/meetearnest/global-request-logger.git"
   },
   "author": "Brian Romanko",
   "license": "MIT",
