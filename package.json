@@ -2,15 +2,29 @@
   "name": "global-request-logger",
   "version": "0.0.1",
   "description": "This module configures the http and https modules to raise logging events for every outgoing request.",
+  "keywords": [
+    "http", "logger", "global", "request", "mixin"
+  ],
+  "homepage": "https://github.com/meetearnest/global-request-logger",
   "main": "index.js",
   "scripts": {
     "test": "mocha test/**/*.spec.js --reporter spec"
   },
+  "engines": [
+    "node"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/meetearnest/global-request-logger.git"
   },
-  "author": "Brian Romanko",
+  "files": [
+    "index.js"
+  ],
+  "author": {
+    "name": "Brian Romanko",
+    "email": "hello@bromanko.com",
+    "url": "http://bromanko.com"
+  },
   "license": "MIT",
   "dependencies": {
     "lodash": "~2.4.1"
